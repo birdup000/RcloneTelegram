@@ -75,5 +75,6 @@ TypeScript class named `TelegramBackend` that provides an implementation of the 
 
    ```
 
-That should be all you need to make the `TelegramBackend` functional as an rclone backend.
-btw this was ai generated for educational purposes.
+That should be all you need to make the `TelegramBackend` functional as an rclone backend. 
+
+-BTW this was ai generated for educational purposes.
