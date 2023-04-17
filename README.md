@@ -1,5 +1,5 @@
 # RcloneTelegram
-The code you provided is a TypeScript class named `TelegramBackend` that provides an implementation of the rclone backend for Telegram. To make it functional, you need to do the following:
+TypeScript class named `TelegramBackend` that provides an implementation of the rclone backend for Telegram. To make it functional, you need to do the following:
 
 1. Install the required packages:
 
@@ -76,3 +76,4 @@ The code you provided is a TypeScript class named `TelegramBackend` that provide
    ```
 
 That should be all you need to make the `TelegramBackend` functional as an rclone backend.
+btw this was ai generated for educational purposes.
