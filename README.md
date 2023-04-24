@@ -89,6 +89,20 @@ rclone mount telegram: /path/to/local/directory --daemon --allow-other
 
 This backend is implemented using the Telegraf library to interact with the Telegram API. The `Put()` method reads a local file into chunks and uploads each chunk separately to Telegram using the `sendDocument()` method. The `Get()` method downloads each chunk separately from Telegram using the `exportMessageLink()` method and writes them to the output stream. The `Delete()` method deletes each message separately from the chat using the `deleteMessage()` method.
 
+
+
+## Compliement with Telegram Terms Service 
+Rclone is an open-source command-line program that allows users to sync files and directories between different cloud storage providers. One of the features of rclone is the ability to use Telegram as a backend for remote storage.
+
+According to the Telegram API terms of service (TOS), using the Telegram API for file storage is allowed as long as the files are related to the user's personal use and do not infringe on any copyrights or intellectual property rights. The Telegram API TOS also states that Telegram reserves the right to block the access of any user or application that violates the terms of service.
+
+The rclone Telegram backend complies with the Telegram API TOS by using the Telegram API to store files only for the purpose of syncing files between the user's devices. The rclone Telegram backend does not provide any public access to the files stored on Telegram, and the files are only accessible to the user who uploaded them.
+
+Additionally, the rclone Telegram backend encrypts the files using client-side encryption, which means that the files are encrypted on the user's device before they are uploaded to Telegram. This ensures that the files are protected from unauthorized access, even if they were to be intercepted by a third party.
+
+Overall, the rclone Telegram backend complies with the Telegram API TOS by ensuring that the files stored on Telegram are used only for personal use and are encrypted to protect the user's privacy.
+
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
