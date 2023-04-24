@@ -47,7 +47,7 @@ class TelegramBackend {
   }
 
   async Delete(inPath: string) {
-    await this.bot.telegram.deleteMessage(this.config.chatId, inPath);
+    await this.bot.telegram.deleteMessage(this.config.chatId, Number(inPath));
   }
 
   // This is a function that starts listening for messages from Telegram.
