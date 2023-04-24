@@ -41,9 +41,7 @@ class TelegramBackend {
       throw new Error('Output stream is not writable');
     }
 
-    const msg = await this.bot.telegram.getFile(this.config.chatId, inPath);
-    const url = `https://api.telegram.org/file/bot${this.config.botToken}/${msg.file_path}`;
-    const response = await fetch(url);
+    const response = await fetch(`https://api.telegram.org/file/bot${this.config.botToken}/${inPath}`);
     const buffer = await response.buffer();
     await outStream.write(buffer);
   }
@@ -81,7 +79,7 @@ async function main() {
   // Get the Telegram config.
   const config = {
     botToken: process.env.BOT_TOKEN,
-    chatId: process.env.CHAT_ID,
+    chatId: Number(process.env.CHAT_ID),
   };
 
   // Create a TelegramBackend instance.
