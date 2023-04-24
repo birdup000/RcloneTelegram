@@ -79,9 +79,9 @@ async function startServer() {
 // This is the main function.
 async function main() {
   // Get the Telegram config.
-  const config: TelegramConfig = {
-    botToken: 'YOUR_BOT_TOKEN',
-    chatId: 123456, // <-- Change this to your chat ID.
+  const config = {
+    botToken: process.env.BOT_TOKEN,
+    chatId: process.env.CHAT_ID,
   };
 
   // Create a TelegramBackend instance.
