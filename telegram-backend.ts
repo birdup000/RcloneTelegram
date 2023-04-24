@@ -31,6 +31,19 @@ class TelegramBackend {
       chunks.push(chunk);
     }
 
+    if (chunks.length > 2097152000) {
+      // If the file is larger than 2GB, split it into chunks of 2GB
+      const chunkSize = 2097152000;
+      const chunks = chunks.reduce((acc, chunk, i) => {
+        if (i % chunkSize === 0) {
+          acc.push(chunk);
+        } else {
+          acc[acc.length - 1] = Buffer.concat([acc[acc.length - 1], chunk]);
+        }
+        return acc;
+      }, []);
+    }
+
     await Promise.all(chunks.map(async (chunk) => {
       await this.bot.telegram.sendDocument(this.config.chatId, { source: chunk });
     }));
@@ -42,8 +55,23 @@ class TelegramBackend {
     }
 
     const response = await fetch(`https://api.telegram.org/file/bot${this.config.botToken}/${inPath}`);
-    const buffer = await response.buffer();
-    await outStream.write(buffer);
+    const buffer = await response.arrayBuffer();
+
+    if (buffer.byteLength > 2097152000) {
+      // If the file is larger than 2GB, merge the chunks into a single file
+      const chunkSize = 2097152000;
+      const chunks = [];
+      let offset = 0;
+      while (offset < buffer.byteLength) {
+        chunks.push(buffer.slice(offset, offset + chunkSize));
+        offset += chunkSize;
+      }
+      await Promise.all(chunks.map(async (chunk) => {
+        await outStream.write(chunk);
+      }));
+    } else {
+      await outStream.write(buffer);
+    }
   }
 
   async Delete(inPath: string) {
@@ -59,6 +87,16 @@ class TelegramBackend {
   async stop() {
     await this.bot.stop();
   }
+
+  async upload(file: string, remote: string) {
+    try {
+      const client = new rclone.Client();
+      await client.connect();
+      await client.copy(file, remote, { chunkSize: 2097152000 });
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
 
 // This is a function that starts the server.
@@ -69,37 +107,24 @@ async function startServer() {
     res.send('Hello, world!');
   });
 
+  app.post('/upload', async (req, res) => {
+    const file = req.body.file;
+    const remote = req.body.remote;
+
+    try {
+      const client = new rclone.Client();
+      await client.connect();
+      await client.copy(file, remote, { chunkSize: 2097152000 });
+      res.sendStatus(200);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  });
+
   app.listen(3000, () => {
-    console.log(`Server started on port ${3000}`);
+    console.log('App listening on port 3000');
   });
 }
 
-// This is the main function.
-async function main() {
-  // Get the Telegram config.
-  const config = {
-    botToken: process.env.BOT_TOKEN,
-    chatId: Number(process.env.CHAT_ID),
-  };
-
-  // Create a TelegramBackend instance.
-  const telegramBackend = new TelegramBackend(config);
-
-  // Start the server.
-  await startServer();
-
-  // Start listening for messages from Telegram.
-  telegramBackend.start();
-
-  // Wait for the user to press `Ctrl`+`C` to exit.
-  process.on('SIGINT', () => {
-    // Stop the server.
-    (async () => {
-      await telegramBackend.stop();
-      process.exit();
-    })();
-  });
-}
-
-// Run the main function.
 main();
