@@ -1,5 +1,5 @@
-import { Readable, Writable } from 'stream';
-import { Telegraf } from 'telegraf';
+import stream from 'stream';
+import { Telegraf, Context, Update } from 'telegraf';
 import crypto from 'crypto';
 import fetch from 'node-fetch';
 import { Config } from 'rclone';
@@ -7,7 +7,7 @@ import { Config } from 'rclone';
 class TelegramBackend {
   private config: any;
   private botToken: string;
-  private bot: any;
+  private bot: Telegraf<Context<Update>>['bot'];
 
   constructor(config: Config) {
     this.config = config.get('telegram');
