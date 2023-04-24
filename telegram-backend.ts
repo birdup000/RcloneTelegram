@@ -1,6 +1,5 @@
 import { Readable, Writable } from 'stream';
 import { Telegraf } from 'telegraf';
-import * as crypto from 'crypto';
 import fetch from 'node-fetch';
 import { Config } from 'rclone';
 
@@ -32,7 +31,6 @@ class TelegramBackend {
     const msgIds: number[] = [];
     let size = 0;
     let part = 0;
-    let checksum = '';
 
     const chunkSize = 2 * 1024 * 1024; // 2MB
     const chunks = [];
@@ -46,13 +44,12 @@ class TelegramBackend {
     for (const chunk of chunks) {
       size += chunk.length;
       part++;
-      checksum += crypto.createHash('sha256').update(chunk).digest('hex');
 
       const msg = await this.bot.telegram.sendDocument(chatId, { source: chunk });
       msgIds.push(msg.message_id);
     }
 
-    return { checksum, size, msgIds };
+    return { size, msgIds };
   }
 
   async Get(outStream: Writable, inPath: string, options: any) {
