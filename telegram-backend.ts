@@ -1,6 +1,8 @@
 import { Readable, Writable } from 'stream';
 import { Telegraf } from 'telegraf';
 import { Config } from 'rclone';
+import express from 'express';
+import fetch from 'node-fetch';
 
 // This is a type annotation for the `config` parameter.
 // It specifies that the `config` parameter must be an object
@@ -24,19 +26,14 @@ class TelegramBackend {
       throw new Error('Input stream is not readable');
     }
 
-    const chatId = this.config.chatId;
-    const chunkSize = 2 * 1024 * 1024; // 2MB
     const chunks = [];
-
-    // Read the input stream into chunks of 2MB
     for await (const chunk of inputStream) {
       chunks.push(chunk);
     }
 
-    // Upload each chunk separately to Telegram
-    for (const chunk of chunks) {
-      await this.bot.telegram.sendDocument(chatId, { source: chunk });
-    }
+    await Promise.all(chunks.map(async (chunk) => {
+      await this.bot.telegram.sendDocument(this.config.chatId, { source: chunk });
+    }));
   }
 
   async Get(outStream: Writable, inPath: string) {
@@ -54,42 +51,55 @@ class TelegramBackend {
   async Delete(inPath: string) {
     await this.bot.telegram.deleteMessage(this.config.chatId, inPath);
   }
-}
 
-export { TelegramBackend };
+  // This is a function that starts listening for messages from Telegram.
+  start() {
+    this.bot.launch();
+  }
+
+  // This is a function that stops listening for messages from Telegram.
+  async stop() {
+    await this.bot.stop();
+  }
+}
 
 // This is a function that starts the server.
 async function startServer() {
-  const port = 3000;
   const app = express();
 
   app.get('/', (req, res) => {
     res.send('Hello, world!');
   });
 
-  app.listen(port, () => {
-    console.log(`Server started on port ${port}`);
+  app.listen(3000, () => {
+    console.log(`Server started on port ${3000}`);
   });
 }
 
 // This is the main function.
 async function main() {
-  // Start the server.
-  await startServer();
+  // Get the Telegram config.
+  const config: TelegramConfig = {
+    botToken: 'YOUR_BOT_TOKEN',
+    chatId: 123456, // <-- Change this to your chat ID.
+  };
 
   // Create a TelegramBackend instance.
-  const telegramBackend = new TelegramBackend({
-    botToken: 'YOUR_BOT_TOKEN',
-    chatId: 'YOUR_CHAT_ID',
-  });
+  const telegramBackend = new TelegramBackend(config);
+
+  // Start the server.
+  await startServer();
 
   // Start listening for messages from Telegram.
   telegramBackend.start();
 
   // Wait for the user to press `Ctrl`+`C` to exit.
   process.on('SIGINT', () => {
-    telegramBackend.stop();
-    process.exit();
+    // Stop the server.
+    (async () => {
+      await telegramBackend.stop();
+      process.exit();
+    })();
   });
 }
 
