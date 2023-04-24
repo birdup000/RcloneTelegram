@@ -5,11 +5,16 @@ This is a backend for [rclone](https://rclone.org/) that allows uploading, downl
 ## Installation
 
 1. Install [rclone](https://rclone.org/install/) and [Node.js](https://nodejs.org/)
-2. Install the required Node.js packages:
+2. Clone or download the repository to your local machine. 
+3.Install the required Node.js packages inside the repo directory:
 ```bash
 npm install telegraf crypto node-fetch
 ```
-3. Clone or download the repository to your local machine.
+
+4.Compile
+```bash
+tsc telegram-backend.ts
+```
 
 ## Usage
 
