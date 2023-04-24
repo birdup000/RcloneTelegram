@@ -1,4 +1,4 @@
-import stream from 'stream';
+import { Readable, Writable } from 'stream';
 import { Telegraf, Context, Update } from 'telegraf';
 import crypto from 'crypto';
 import fetch from 'node-fetch';
@@ -58,46 +58,17 @@ class TelegramBackend {
   }
 
   async Get(outStream: Writable, inPath: string, options: any) {
-    if (!outStream.writable) {
-      throw new Error('Output stream is not writable');
-    }
-
     const chatId = this.config.chat_id;
-    const msgIds = options?.msgIds;
-    if (!msgIds || !Array.isArray(msgIds)) {
-      throw new Error('Invalid options');
+    const msgId = this.config[inPath];
+    if (!msgId) {
+      throw new Error(`Invalid telegram message id for path: ${inPath}`);
     }
 
-    // Download each chunk separately from Telegram and write to the output stream
-    for (const msgId of msgIds) {
-      const msg = await this.bot.exportMessageLink(chatId, msgId);
-      const url = `https://api.telegram.org/file/bot${this.botToken}/${msg.document.file_name}`;
-      const response = await fetch(url);
-      const buffer = await response.buffer();
-      outStream.write(buffer);
-    }
+    const fileUrl = await this.bot.telegram.getFileLink(msgId);
+    const response = await fetch(fileUrl.href);
 
-    // Merge the downloaded chunks into a single file
-    return { size: outStream.bytesWritten };
-  }
-
-  async Delete(inPath: string, options: any) {
-    const chatId = this.config.chat_id;
-    const msgIds = options?.msgIds;
-    if (!msgIds || !Array.isArray(msgIds)) {
-      throw new Error('Invalid options');
-    }
-
-    for (const msgId of msgIds) {
-      try {
-        await this.bot.deleteMessage(chatId, msgId);
-      } catch (e) {
-        console.log('Message deletion failed', e);
-      }
-    }
-
-    return { size: 0 };
+    response.body.pipe(outStream);
   }
 }
 
-export { TelegramBackend };
+export default TelegramBackend;
