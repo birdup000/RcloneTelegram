@@ -1,80 +1,89 @@
-# RcloneTelegram
-TypeScript class named `TelegramBackend` that provides an implementation of the rclone backend for Telegram. To make it functional, you need to do the following:
+# Telegram Backend for Rclone
 
-1. Install the required packages:
+This is a backend for [rclone](https://rclone.org/) that allows uploading, downloading, and deleting files from Telegram using the Telegraf library.
 
-   ```
+## Installation
 
-   npm install telegraf rclone node-fetch crypto
+1. Install [rclone](https://rclone.org/install/) and [Node.js](https://nodejs.org/)
+2. Install the required Node.js packages:
+```bash
+npm install telegraf crypto node-fetch
+```
+3. Clone or download the repository to your local machine.
 
-   ```
+## Usage
 
-2. Create a Telegram bot by following the instructions in the Telegram documentation.
+### Configuration
 
-3. Replace `BOT_TOKEN` with your Telegram bot token in the following line:
+Before using the Telegram backend, you need to create a Telegram bot and obtain a bot token. You can follow the instructions [here](https://core.telegram.org/bots#creating-a-new-bot) to create a new bot and obtain the token.
 
-   ```
+You also need to obtain the chat ID of the chat where you want to upload or download files. You can follow the instructions [here](https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id) to obtain the chat ID.
 
-   const telegram = new Telegraf('BOT_TOKEN');
+### Running rclone with Telegram backend
 
-   ```
+To use the Telegram backend with rclone, you need to add the following configuration to your rclone configuration file (usually located at `~/.config/rclone/rclone.conf`):
 
-4. Replace `this.config.telegramChatId` with the chat ID of the Telegram chat where you want to upload the files. You can get the chat ID by sending a message to your bot and then accessing the `chat` object in the message object.
+```
+[telegram]
+type = telegram
+bot_token = <BOT_TOKEN>
+chat_id = <CHAT_ID>
+```
 
-5. Save the code in a file named `telegram-backend.ts` and compile it to JavaScript using the TypeScript compiler:
+Replace `<BOT_TOKEN>` and `<CHAT_ID>` with your Telegram bot token and chat ID.
 
-   ```
+#### Uploading files to Telegram
 
-   tsc telegram-backend.ts
+To upload a file to Telegram, use the `rclone copy` command with the `telegram:` source and the local file path as the destination:
 
-   ```
+```bash
+rclone copy /path/to/local/file telegram:/path/to/remote/file
+```
 
-6. Use the `rclone` command-line tool to configure the Telegram backend by running the following command:
+#### Downloading files from Telegram
 
-   ```
+To download a file from Telegram, use the `rclone copy` command with the `telegram:` destination and the local file path as the source:
 
-   rclone config
+```bash
+rclone copy telegram:/path/to/remote/file /path/to/local/file
+```
 
-   ```
+#### Deleting files from Telegram
 
-   Follow the instructions to configure the backend, and use `TelegramBackend` as the backend type. You will need to provide the following configuration options:
+To delete a file from Telegram, use the `rclone delete` command with the `telegram:` remote and the file path:
 
-   - `telegram_chat_id`: The chat ID of the Telegram chat where you want to upload the files.
+```bash
+rclone delete telegram:/path/to/remote/file
+```
 
-   - `type`: `telegram`
+#### Mounting Telegram as a local directory
 
-   - `token`: The token of your Telegram bot.
+To mount the Telegram backend as a local directory, use the `rclone mount` command:
 
-   For example:
+```bash
+rclone mount telegram: /path/to/local/directory
+```
 
-   ```
+This will mount the Telegram backend as a directory at `/path/to/local/directory`.
 
-   [telegram]
+Note that the mount command will continue running in the foreground until you terminate it with Ctrl+C. If you want to run the mount command in the background, use the `--daemon` option:
 
-   type = telegram
+```bash
+rclone mount telegram: /path/to/local/directory --daemon
+```
 
-   token = YOUR_BOT_TOKEN
+This will run the mount command in the background as a daemon.
 
-   telegram_chat_id = YOUR_CHAT_ID
+You can also add the `--allow-other` option to allow other users to access the mounted directory:
 
-   ```
+```bash
+rclone mount telegram: /path/to/local/directory --daemon --allow-other
+```
 
-7. Use the `rclone` command-line tool to copy files to and from the Telegram backend. For example, to copy a file named `example.txt` to the Telegram backend, run the following command:
+## Implementation
 
-   ```
+This backend is implemented using the Telegraf library to interact with the Telegram API. The `Put()` method reads a local file into chunks and uploads each chunk separately to Telegram using the `sendDocument()` method. The `Get()` method downloads each chunk separately from Telegram using the `exportMessageLink()` method and writes them to the output stream. The `Delete()` method deletes each message separately from the chat using the `deleteMessage()` method.
 
-   rclone copy example.txt telegram:
+## License
 
-   ```
-
-   To copy a file from the Telegram backend to your local filesystem, run the following command:
-
-   ```
-
-   rclone copy telegram:/example.txt .
-
-   ```
-
-That should be all you need to make the `TelegramBackend` functional as an rclone backend. 
-
-"BTW this README file is autogenerated(By AI)"
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
