@@ -2,7 +2,7 @@ import { Readable, Writable } from 'stream';
 import { Telegraf } from 'telegraf';
 import { Config } from 'rclone';
 import express from 'express';
-import fetch from 'node-fetch';
+import * as node_fetch from 'node-fetch';
 
 // This is a type annotation for the `config` parameter.
 // It specifies that the `config` parameter must be an object
