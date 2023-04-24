@@ -8,7 +8,7 @@ This is a backend for [rclone](https://rclone.org/) that allows uploading, downl
 2. Clone or download the repository to your local machine. 
 3. Install the required Node.js packages inside the repo directory:
 ```bash
-npm install telegraf crypto node-fetch
+npm install github:telegraf/telegraf node-fetch && npm install --save-dev @types/node
 ```
 
 4. Compile

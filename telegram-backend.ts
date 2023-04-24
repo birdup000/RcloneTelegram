@@ -73,7 +73,7 @@ class TelegramBackend {
     }
 
     // Merge the downloaded chunks into a single file
-    return { size: outStream.bytesWritten };
+    return { size: 0 };
   }
 
   async Delete(inPath: string, options: any) {
