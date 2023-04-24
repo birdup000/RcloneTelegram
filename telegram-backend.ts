@@ -1,6 +1,6 @@
 import { Readable, Writable } from 'stream';
 import { Telegraf } from 'telegraf';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 import fetch from 'node-fetch';
 import { Config } from 'rclone';
 
