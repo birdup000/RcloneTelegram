@@ -94,16 +94,17 @@ This backend is implemented using the Telegraf library to interact with the Tele
 
 
 
-## Compliement with Telegram Terms Service 
-Rclone is an open-source command-line program that allows users to sync files and directories between different cloud storage providers. One of the features of rclone is the ability to use Telegram as a backend for remote storage.
+## Compliance with Telegram Terms of Service
 
-According to the Telegram API terms of service (TOS), using the Telegram API for file storage is allowed as long as the files are related to the user's personal use and do not infringe on any copyrights or intellectual property rights. The Telegram API TOS also states that Telegram reserves the right to block the access of any user or application that violates the terms of service.
+Rclone is an open-source command-line program designed to synchronize files and directories between various cloud storage providers. One of its unique features includes the ability to use Telegram as a backend for remote storage.
 
-The rclone Telegram backend complies with the Telegram API TOS by using the Telegram API to store files only for the purpose of syncing files between the user's devices. The rclone Telegram backend does not provide any public access to the files stored on Telegram, and the files are only accessible to the user who uploaded them.
+In accordance with the Telegram API Terms of Service (TOS), utilizing the Telegram API for file storage is permitted, provided that the files are intended for the user's personal use and do not infringe on any copyrights or intellectual property rights. Furthermore, the Telegram API TOS states that Telegram reserves the right to block access to any user or application found to be in violation of these terms.
 
-Additionally, the rclone Telegram backend encrypts the files using client-side encryption, which means that the files are encrypted on the user's device before they are uploaded to Telegram. This ensures that the files are protected from unauthorized access, even if they were to be intercepted by a third party.
+The rclone Telegram backend adheres to the Telegram API TOS by using the Telegram API exclusively for the purpose of synchronizing files between the user's devices. It does not grant public access to the files stored on Telegram, ensuring that only the user who uploaded them can access the files.
 
-Overall, the rclone Telegram backend complies with the Telegram API TOS by ensuring that the files stored on Telegram are used only for personal use and are encrypted to protect the user's privacy.
+To enhance security, the rclone Telegram backend employs client-side encryption, meaning that files are encrypted on the user's device before being uploaded to Telegram. This approach guarantees that the files remain protected from unauthorized access, even if intercepted by a third party.
+
+In conclusion, the rclone Telegram backend complies with the Telegram API TOS by confirming that files stored on Telegram are for personal use only and are encrypted to safeguard the user's privacy.
 
 
 ## License
