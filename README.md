@@ -13,11 +13,14 @@ npm install github:telegraf/telegraf node-fetch && npm install --save-dev @types
 
 4. Compile
 ```bash
-tsc telegram-backend.ts
+tsc --project tsconfig.json
 ```
 
 ## Usage
-
+Run with 
+```
+node telegram-backend.js
+```
 ### Configuration
 
 Before using the Telegram backend, you need to create a Telegram bot and obtain a bot token. You can follow the instructions [here](https://core.telegram.org/bots#creating-a-new-bot) to create a new bot and obtain the token.
