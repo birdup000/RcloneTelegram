@@ -26,7 +26,7 @@ class TelegramBackend {
       throw new Error('Input stream is not readable');
     }
 
-    const chunks = [];
+    let chunks = [];
     for await (const chunk of inputStream) {
       chunks.push(chunk);
     }
@@ -34,7 +34,7 @@ class TelegramBackend {
     if (chunks.length > 2097152000) {
       // If the file is larger than 2GB, split it into chunks of 2GB
       const chunkSize = 2097152000;
-      const chunks = chunks.reduce((acc, chunk, i) => {
+      chunks = chunks.reduce((acc, chunk, i) => {
         if (i % chunkSize === 0) {
           acc.push(chunk);
         } else {
@@ -127,4 +127,4 @@ async function startServer() {
   });
 }
 
-main();
+startServer();
