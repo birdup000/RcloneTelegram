@@ -4,11 +4,15 @@ import { Telegraf } from 'telegraf';
 const client = new rclonejs.Client();
 const bot = new Telegraf('YOUR_BOT_TOKEN');
 
+// Load the api keys and tokens from the .env file
+const dotenv = require('dotenv');
+dotenv.config();
+
 const config = {
-  type: 'drive',
-  client_id: 'YOUR_CLIENT_ID',
-  client_secret: 'YOUR_CLIENT_SECRET',
-  token: 'YOUR_TOKEN',
+  type: process.env.TYPE,
+  client_id: process.env.CLIENT_ID,
+  client_secret: process.env.CLIENT_SECRET,
+  token: process.env.TOKEN,
 };
 
 client.connect(config);
