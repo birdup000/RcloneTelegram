@@ -1,6 +1,6 @@
 import { Readable, Writable } from 'stream';
 import { Telegraf } from 'telegraf';
-import { Config } from 'rclone';
+import { Config } from 'rclone.js';
 import express from 'express';
 import * as node_fetch from 'node-fetch';
 
