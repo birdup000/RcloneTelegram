@@ -11,7 +11,7 @@ To use this backend, you also need to have a Telegram bot and chat ID. You can c
 Once you have RClone and a Telegram bot set up, you can install this backend by running the following command:
 
 ```
-go install github.com/greengeckowizard/RcloneTelegram
+go install github.com/greengeckowizard/RcloneTelegram@latest
 ```
 
 ## Configuration
