@@ -60,3 +60,7 @@ rclone copy mytelegram:/remote/path /path/to/local/file
 This should download the remote file from your Telegram chat to the local file system.
 
 Note that the Telegram backend only supports files up to 2GB in size.
+
+## Community
+[Discord Server](https://discord.gg/H7Qud9Y2eJ)
+
