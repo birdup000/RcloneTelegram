@@ -15,7 +15,7 @@ import (
 	"github.com/rclone/rclone/lib/readers"
 	"github.com/rclone/rclone/lib/timedata"
 	"github.com/rclone/rclone/vfs"
-	"github.com/tucnak/telebot"
+	"gopkg.in/telebot.v3"
 )
 
 // Register with Fs
