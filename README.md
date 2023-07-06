@@ -1,4 +1,4 @@
-# Telegram Backend for RClone
+# Telegram Backend for RClone (Still Under Development) *Broken at the moment*
 
 This is a backend for [RClone](https://rclone.org/) that allows you to use Telegram as a remote storage service.
 
