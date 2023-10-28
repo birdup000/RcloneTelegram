@@ -1,5 +1,7 @@
 # Telegram Backend for RClone (Still Under Development) *Broken at the moment*
 
+# Project is Dead 
+
 This is a backend for [RClone](https://rclone.org/) that allows you to use Telegram as a remote storage service.
 
 ## Installation
@@ -61,6 +63,4 @@ This should download the remote file from your Telegram chat to the local file s
 
 Note that the Telegram backend only supports files up to 2GB in size.
 
-## Community
-[Discord Server](https://discord.gg/H7Qud9Y2eJ)
 
